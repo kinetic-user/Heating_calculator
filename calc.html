@@ -3,67 +3,103 @@
 <head>
     <title>Расчет стоимости продукта</title>
     <script>
-    function calculateCost() {
-      var engineeringSystem = document.getElementById("engineering-system").value;
-      var roomType = document.getElementById("room-type").value;
-      var area = parseFloat(document.getElementById("area").value);
+        function calculateCost() {
+            var engineeringSystem = document.getElementById("engineeringSystem").value;
+            var roomType = document.getElementById("roomType").value;
+            var area = parseFloat(document.getElementById("area").value);
 
-      // Таблица стоимостей
-      var costTable = {
-        "Инженерная система 1": {
-          "Тип помещения 1": 10,
-          "Тип помещения 2": 15,
-          "Тип помещения 3": 20
-        },
-        "Инженерная система 2": {
-          "Тип помещения 1": 12,
-          "Тип помещения 2": 18,
-          "Тип помещения 3": 24
-        },
-        "Инженерная система 3": {
-          "Тип помещения 1": 14,
-          "Тип помещения 2": 21,
-          "Тип помещения 3": 28
+            var costTable = {
+                "Вентиляция": {
+                    "Жилые": {
+                        "0-3000": 10,
+                        "3000-4000": 15,
+                        "7500-10227.3": 20,
+                        "10227.3-15000": 25,
+                        "15000-18333.3": 30,
+                        "18333.3-40000": 35,
+                        "40000-51428.6": 40,
+                        "51428.6-инфинити": 45
+                    },
+                    "Складские": {
+                        "0-3000": 12,
+                        "3000-4000": 18,
+                        "7500-10227.3": 24,
+                        "10227.3-15000": 30,
+                        "15000-18333.3": 36,
+                        "18333.3-40000": 42,
+                        "40000-51428.6": 48,
+                        "51428.6-инфинити": 54
+                    },
+                    // остальные значения для других типов помещений и инженерных систем
+                },
+                "Кондиционирование": {
+                    // ...
+                },
+                // остальные значения для других инженерных систем
+            };
+
+            var costRanges = {
+                "0-3000": [0, 3000],
+                "3000-4000": [3000, 4000],
+                "7500-10227.3": [7500, 10227.3],
+                "10227.3-15000": [10227.3, 15000],
+                "15000-18333.3": [15000, 18333.3],
+                "18333.3-40000": [18333.3, 40000],
+                "40000-51428.6": [40000, 51428.6],
+                "51428.6-инфинити": [51428.6, Infinity]
+            };
+
+            var cost = 0;
+            for (var range in costTable[engineeringSystem][roomType]) {
+                var rangeValues = costRanges[range];
+                if (area >= rangeValues[0] && area < rangeValues[1]) {
+                    cost = costTable[engineeringSystem][roomType][range];
+                    break;
+                }
+            }
+
+            document.getElementById("result").innerHTML = "Стоимость продукта: " + cost + " рублей";
         }
-      };
-
-      // Проверка наличия значений в таблице
-      if (!(engineeringSystem in costTable) || !(roomType in costTable[engineeringSystem])) {
-        alert("Введены некорректные значения!");
-        return;
-      }
-
-      // Вычисление стоимости продукта
-      var cost = costTable[engineeringSystem][roomType] * area;
-
-      // Вывод результата
-      document.getElementById("result").innerHTML = "Стоимость продукта: " + cost + " рублей.";
-    }
     </script>
 </head>
 <body>
     <h1>Расчет стоимости продукта</h1>
-    <form>
-        <label for="engineering-system">Инженерная система:</label>
-        <select id="engineering-system">
-            <option value="Инженерная система 1">Инженерная система 1</option>
-            <option value="Инженерная система 2">Инженерная система 2</option>
-            <option value="Инженерная система 3">Инженерная система 3</option>
-        </select>
-        <br><br>
-        <label for="room-type">Тип помещения:</label>
-        <select id="room-type">
-            <option value="Тип помещения 1">Тип помещения 1</option>
-            <option value="Тип помещения 2">Тип помещения 2</option>
-            <option value="Тип помещения 3">Тип помещения 3</option>
-        </select>
-        <br><br>
-        <label for="area">Площадь (в кв. м.):</label>
-        <input type="number" id="area">
-        <br><br>
-        <input type="button" value="Рассчитать" onclick="calculateCost()">
-    </form>
+
+    <label for="engineeringSystem">Инженерная система:</label>
+    <select id="engineeringSystem">
+        <option value="Вентиляция">Вентиляция</option>
+        <option value="Кондиционирование">Кондиционирование</option>
+        <option value="Холодоснабжение">Холодоснабжение</option>
+        <option value="Отопление">Отопление</option>
+        <option value="Теплоснабжение">Теплоснабжение</option>
+        <option value="Водоснабжение">Водоснабжение</option>
+        <option value="Водоотведение">Водоотведение</option>
+        <option value="Электроосвещение">Электроосвещение</option>
+        <option value="Дымоудаление">Дымоудаление</option>
+    </select>
+
     <br>
+
+    <label for="roomType">Тип помещения:</label>
+    <select id="roomType">
+        <option value="Жилые">Жилые</option>
+        <option value="Складские">Складские</option>
+        <option value="Административно-бытовые">Административно-бытовые</option>
+        <option value="Производственные">Производственные</option>
+        <option value="Технологические">Технологические</option>
+    </select>
+
+    <br>
+
+    <label for="area">Площадь:</label>
+    <input type="text" id="area">
+
+    <br>
+
+    <button onclick="calculateCost()">Рассчитать стоимость</button>
+
+    <br>
+
     <div id="result"></div>
 </body>
 </html>
