@@ -1,1 +1,69 @@
-﻿
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Расчет стоимости продукта</title>
+    <script>
+    function calculateCost() {
+      var engineeringSystem = document.getElementById("engineering-system").value;
+      var roomType = document.getElementById("room-type").value;
+      var area = parseFloat(document.getElementById("area").value);
+
+      // Таблица стоимостей
+      var costTable = {
+        "Инженерная система 1": {
+          "Тип помещения 1": 10,
+          "Тип помещения 2": 15,
+          "Тип помещения 3": 20
+        },
+        "Инженерная система 2": {
+          "Тип помещения 1": 12,
+          "Тип помещения 2": 18,
+          "Тип помещения 3": 24
+        },
+        "Инженерная система 3": {
+          "Тип помещения 1": 14,
+          "Тип помещения 2": 21,
+          "Тип помещения 3": 28
+        }
+      };
+
+      // Проверка наличия значений в таблице
+      if (!(engineeringSystem in costTable) || !(roomType in costTable[engineeringSystem])) {
+        alert("Введены некорректные значения!");
+        return;
+      }
+
+      // Вычисление стоимости продукта
+      var cost = costTable[engineeringSystem][roomType] * area;
+
+      // Вывод результата
+      document.getElementById("result").innerHTML = "Стоимость продукта: " + cost + " рублей.";
+    }
+    </script>
+</head>
+<body>
+    <h1>Расчет стоимости продукта</h1>
+    <form>
+        <label for="engineering-system">Инженерная система:</label>
+        <select id="engineering-system">
+            <option value="Инженерная система 1">Инженерная система 1</option>
+            <option value="Инженерная система 2">Инженерная система 2</option>
+            <option value="Инженерная система 3">Инженерная система 3</option>
+        </select>
+        <br><br>
+        <label for="room-type">Тип помещения:</label>
+        <select id="room-type">
+            <option value="Тип помещения 1">Тип помещения 1</option>
+            <option value="Тип помещения 2">Тип помещения 2</option>
+            <option value="Тип помещения 3">Тип помещения 3</option>
+        </select>
+        <br><br>
+        <label for="area">Площадь (в кв. м.):</label>
+        <input type="number" id="area">
+        <br><br>
+        <input type="button" value="Рассчитать" onclick="calculateCost()">
+    </form>
+    <br>
+    <div id="result"></div>
+</body>
+</html>
